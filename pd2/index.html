@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Kółko i krzyżyk</title>
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+
+        td {
+            border: 2px solid white;
+            color: black;
+            font-size: 128px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 150px;
+            height: 150px;
+            background: gray;
+        }
+
+        td:hover {
+            background: #444;
+        }
+
+        #mode_button {
+            background: lightgreen;
+            font-size: 24px;
+            margin: 10px;
+            padding: 10px;
+            color: black;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #mode_button:hover {
+            background: whitesmoke;
+        }
+        #reset_buttton{
+            background: lightgreen;
+            font-size: 24px;
+            margin: 10px;
+            padding: 10px;
+            color: black;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #reset_buttton:hover{
+            background: whitesmoke;
+        }
+
+
+    </style>
+</head>
+<body>
+<table>
+    <tr>
+        <td id="0"></td>
+        <td id="1"></td>
+        <td id="2"></td>
+    </tr>
+    <tr>
+        <td id="3"></td>
+        <td id="4"></td>
+        <td id="5"></td>
+    </tr>
+    <tr>
+        <td id="6"></td>
+        <td id="7"></td>
+        <td id="8"></td>
+    </tr>
+</table>
+<button id='reset_buttton' onclick="reset()">Reset</button>
+<button id='mode_button' onclick="change_mode()"></button>
+
+<script>
+    let board = ["", "", "", "", "", "", "", "", ""];
+    let player = "X";
+    let moves = 0;
+    let mode = "player";
+    document.getElementById('mode_button').innerHTML='Tryb gry: '+ mode;
+
+    document.getElementById("0").addEventListener("click", function(){ move("0"); });
+    document.getElementById("1").addEventListener("click", function(){ move("1"); });
+    document.getElementById("2").addEventListener("click", function(){ move("2"); });
+    document.getElementById("3").addEventListener("click", function(){ move("3"); });
+    document.getElementById("4").addEventListener("click", function(){ move("4"); });
+    document.getElementById("5").addEventListener("click", function(){ move("5"); });
+    document.getElementById("6").addEventListener("click", function(){ move("6"); });
+    document.getElementById("7").addEventListener("click", function(){ move("7"); });
+    document.getElementById("8").addEventListener("click", function(){ move("8"); });
+    function change_mode()
+    {
+        if (mode === "player")
+        {
+            mode = "computer";
+        }
+        else {
+            mode = "player"
+        }
+        document.getElementById('mode_button').innerHTML='Tryb gry: '+ mode;
+        reset();
+    }
+    function move(id) {
+        if (board[id] === "") {
+            document.getElementById(id).innerHTML = player;
+            board[id] = player;
+            moves++;
+            checkWin();
+            if (player === "X") player = "O";
+            else player = "X";
+            if(mode === "computer" && player === "O") computerMove();
+            return true;
+        }
+        return false;
+    }
+
+    function computerMove() {
+        let id;
+        do {
+            id = Math.floor(Math.random() * 9);
+        } while(board[id] !== "");
+        document.getElementById(id).innerHTML = "O";
+        board[id] = "O";
+        moves++;
+        checkWin();
+        player = "X";
+        return true;
+    }
+
+
+    function checkWin() {
+        if (
+            (board[0] === player && board[1] === player && board[2] === player) ||
+            (board[3] === player && board[4] === player && board[5] === player) ||
+            (board[6] === player && board[7] === player && board[8] === player) ||
+            (board[0] === player && board[3] === player && board[6] === player) ||
+            (board[1] === player && board[4] === player && board[7] === player) ||
+            (board[2] === player && board[5] === player && board[8] === player) ||
+            (board[0] === player && board[4] === player && board[8] === player) ||
+            (board[2] === player && board[4] === player && board[6] === player)
+        ) {
+            alert("Gracz " + player + " wygrał!");
+            reset();
+        } else if (moves === 9) {
+            alert("Remis!");
+            reset();
+        }
+    }
+
+    // funkcja resetująca grę
+    function reset() {
+        board = ["", "", "", "", "", "", "", "", ""];
+        for(let i=0;i<9;i++)
+        {
+            document.getElementById(i).innerHTML = "";
+        }
+        player = "X";
+        moves = 0;
+    }
+
+</script>
+</body>
+</html>
