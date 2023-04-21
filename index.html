@@ -1,163 +1,58 @@
 <!DOCTYPE html>
-<html lang="pl">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Kółko i krzyżyk</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Dog Gallery</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <style>
-        table {
-            border-collapse: collapse;
+        .gallery {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
         }
-
-        td {
-            border: 2px solid white;
-            color: black;
-            font-size: 128px;
-            font-weight: bold;
-            cursor: pointer;
-            width: 150px;
-            height: 150px;
-            background: gray;
-        }
-
-        td:hover {
-            background: #444;
-        }
-
-        #mode_button {
-            background: lightgreen;
-            font-size: 24px;
+        .gallery img {
+            max-width: 100%;
+            height: auto;
             margin: 10px;
-            padding: 10px;
-            color: black;
-            border-radius: 5px;
-            cursor: pointer;
+            box-shadow: 2px 2px 5px #ccc;
         }
-        #mode_button:hover {
-            background: whitesmoke;
-        }
-        #reset_buttton{
-            background: lightgreen;
-            font-size: 24px;
-            margin: 10px;
-            padding: 10px;
-            color: black;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        #reset_buttton:hover{
-            background: whitesmoke;
-        }
-
-
     </style>
 </head>
 <body>
-<table>
-    <tr>
-        <td id="0"></td>
-        <td id="1"></td>
-        <td id="2"></td>
-    </tr>
-    <tr>
-        <td id="3"></td>
-        <td id="4"></td>
-        <td id="5"></td>
-    </tr>
-    <tr>
-        <td id="6"></td>
-        <td id="7"></td>
-        <td id="8"></td>
-    </tr>
-</table>
-<button id='reset_buttton' onclick="reset()">Reset</button>
-<button id='mode_button' onclick="change_mode()"></button>
+<nav class="navbar navbar-expand-md bg-dark navbar-dark">
+    <a class="navbar-brand" href="#">Dog Gallery</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="collapsibleNavbar">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="#">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">About</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Contact</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div class="container-fluid mt-3">
+    <div class="gallery">
+        <img src="https://images.pexels.com/photos/416192/pexels-photo-416192.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" alt="Dog 1">
+        <img src="https://images.pexels.com/photos/458802/pexels-photo-458802.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" alt="Dog 2">
+        <img src="https://images.pexels.com/photos/145933/pexels-photo-145933.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" alt="Dog 3">
+        <img src="https://images.pexels.com/photos/59523/pexels-photo-59523.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" alt="Dog 4">
+        <img src="https://images.pexels.com/photos/374906/pexels-photo-374906.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" alt="Dog 5">
+        <img src="https://images.pexels.com/photos/416208/pexels-photo-416208.jpeg?auto=compress&cs=inysrgb&dpr=1&w=500" alt="Dog 6">
+    </div>
+</div>
 
-<script>
-    let board = ["", "", "", "", "", "", "", "", ""];
-    let player = "X";
-    let moves = 0;
-    let mode = "player";
-    document.getElementById('mode_button').innerHTML='Tryb gry: '+ mode;
-
-    document.getElementById("0").addEventListener("click", function(){ move("0"); });
-    document.getElementById("1").addEventListener("click", function(){ move("1"); });
-    document.getElementById("2").addEventListener("click", function(){ move("2"); });
-    document.getElementById("3").addEventListener("click", function(){ move("3"); });
-    document.getElementById("4").addEventListener("click", function(){ move("4"); });
-    document.getElementById("5").addEventListener("click", function(){ move("5"); });
-    document.getElementById("6").addEventListener("click", function(){ move("6"); });
-    document.getElementById("7").addEventListener("click", function(){ move("7"); });
-    document.getElementById("8").addEventListener("click", function(){ move("8"); });
-    function change_mode()
-    {
-        if (mode === "player")
-        {
-            mode = "computer";
-        }
-        else {
-            mode = "player"
-        }
-        document.getElementById('mode_button').innerHTML='Tryb gry: '+ mode;
-        reset();
-    }
-    function move(id) {
-        if (board[id] === "") {
-            document.getElementById(id).innerHTML = player;
-            board[id] = player;
-            moves++;
-            checkWin();
-            if (player === "X") player = "O";
-            else player = "X";
-            if(mode === "computer" && player === "O") computerMove();
-            return true;
-        }
-        return false;
-    }
-
-    function computerMove() {
-        let id;
-        do {
-            id = Math.floor(Math.random() * 9);
-        } while(board[id] !== "");
-        document.getElementById(id).innerHTML = "O";
-        board[id] = "O";
-        moves++;
-        checkWin();
-        player = "X";
-        return true;
-    }
-
-
-    function checkWin() {
-        if (
-            (board[0] === player && board[1] === player && board[2] === player) ||
-            (board[3] === player && board[4] === player && board[5] === player) ||
-            (board[6] === player && board[7] === player && board[8] === player) ||
-            (board[0] === player && board[3] === player && board[6] === player) ||
-            (board[1] === player && board[4] === player && board[7] === player) ||
-            (board[2] === player && board[5] === player && board[8] === player) ||
-            (board[0] === player && board[4] === player && board[8] === player) ||
-            (board[2] === player && board[4] === player && board[6] === player)
-        ) {
-            alert("Gracz " + player + " wygrał!");
-            reset();
-        } else if (moves === 9) {
-            alert("Remis!");
-            reset();
-        }
-    }
-
-    // funkcja resetująca grę
-    function reset() {
-        board = ["", "", "", "", "", "", "", "", ""];
-        for(let i=0;i<9;i++)
-        {
-            document.getElementById(i).innerHTML = "";
-        }
-        player = "X";
-        moves = 0;
-    }
-
-</script>
 </body>
 </html>
